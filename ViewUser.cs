@@ -1,0 +1,76 @@
+﻿using Google.Protobuf.WellKnownTypes;
+using MySql.Data.MySqlClient;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace test_jeux
+{
+    public partial class ViewUser : Form
+    {
+        private MySqlConnection conn;
+        private string connectionString;
+        public ViewUser(MySqlConnection conn)
+        {
+            InitializeComponent();
+            this.conn = conn;
+        }
+
+       
+
+        private void LoadData()
+        {
+            try
+            {
+                string query = "SELECT titre, contenu, règle, condit, nombre_joueurs, nombre_cartes FROM jeux";
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = query;
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                adapter.SelectCommand = cmd;
+                using (DataTable dt = new DataTable())
+                {
+                    adapter.Fill(dt);
+                    dataGridView1.DataSource = dt;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Erreur de base de données 1 : " + ex.Message);
+            }
+        }
+
+        private void ViewUser_Load(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Connecte connecte = new Connecte(); 
+            connecte.Show();              
+            this.Hide();               
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
